@@ -1,0 +1,19 @@
+{% extends 'base.html' %} 
+{% block head_title %}{{ post.title }}{% endblock %}
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+    {{ post.body }}
+    <br />Tags:
+    <ul>
+      {% for tag in tags %}
+        <li>
+          <a href="/tag/{{ tag }}">
+            {{ tag }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+    
+
+{% endblock %}
