@@ -22,7 +22,7 @@ def view_category(request, slug):
     })
 
 def view_tags(request, name):
-    tagid = Tag.objects.filter(name=name)[0].id
+    tagid = get_object_or_404(Tag, name=name)
     posts_tag = TaggedItem.objects.filter(tag_id=tagid)
     posts = []
     for post in posts_tag:
