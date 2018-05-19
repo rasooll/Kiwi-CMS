@@ -17,9 +17,16 @@ def view_post(request, slug):
     This is use for single post page view
     """
 
+    tags = Post.objects.filter(slug=slug)[0].tags
+    if tags:
+        # Remove space before and after of tag
+        newTags = tags.replace(' ,', ',').replace(', ', ',').split(',')
+    else:
+        newTags = False
+
     return render_to_response('view_post.html', {
         'post': get_object_or_404(Post, slug=slug),
-        'tags': Post.objects.filter(slug=slug)[0].tags.split(',')
+        'tags': newTags
     })
 
 def view_category(request, slug):
