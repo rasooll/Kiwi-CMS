@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'ckeditor',
+    'ckeditor_uploader',
     'tagging',
     'blog',
 ]
@@ -115,8 +117,31 @@ USE_L10N = True
 
 USE_TZ = True
 
+# CKEditor configuration
+# https://github.com/django-ckeditor/django-ckeditor
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'Full'
+    },
+    'awesome_ckeditor': {
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+            ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript'],
+            ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['BidiLtr', 'BidiRtl'],
+            ['Link', 'Unlink'],
+            ['Image', 'Table'],
+            ['TextColor','BGColor'],
+            ['Smiley', 'RemoveFormat'],
+            ['Format', 'FontSize' ]
+        ]
+    },
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = 'static/'
+CKEDITOR_UPLOAD_PATH = STATIC_ROOT+"uploads/"
