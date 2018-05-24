@@ -53,11 +53,12 @@ class Comment(models.Model):
     """
     Model for Comments for Posts.
     """
-    post=models.ForeignKey(Post, on_delete=models.CASCADE, verbose_name='نوشته')
-    name=models.CharField(max_length=100, verbose_name='نام شما')
-    email=models.EmailField(verbose_name='آدرس ایمیل')
-    text=models.TextField(verbose_name='متن دیدگاه')
-    date=models.DateTimeField(auto_now_add=True, verbose_name='زمان انتشار')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, verbose_name='نوشته')
+    name = models.CharField(max_length=100, verbose_name='نام شما')
+    email = models.EmailField(verbose_name='آدرس ایمیل')
+    text = models.TextField(verbose_name='متن دیدگاه')
+    date = models.DateTimeField(auto_now_add=True, verbose_name='زمان انتشار')
+    accepted = models.BooleanField(default=False, verbose_name='تایید شده؟') 
 
     def __str__(self):
         return "{} --- {}".format(self.post.title, self.text)

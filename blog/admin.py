@@ -13,8 +13,9 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = ('title', 'slug')
 
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('name', 'post', 'text', 'date')
-    list_filter = ('date',)
+    list_display = ('name', 'post', 'text', 'accepted', 'date')
+    list_editable = ('accepted',)
+    list_filter = ('date','accepted',)
     search_fields = ('text', 'post')
     raw_id_fields = ('post',)
 
