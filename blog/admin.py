@@ -1,5 +1,5 @@
 from django.contrib import admin
-from blog.models import Post, Category
+from blog.models import Post, Category, Comment
 
 class BlogAdmin(admin.ModelAdmin):
     exclude = ['posted']
@@ -10,3 +10,4 @@ class CategoryAdmin(admin.ModelAdmin):
 
 admin.site.register(Post, BlogAdmin)
 admin.site.register(Category, CategoryAdmin)
+admin.site.register(Comment)

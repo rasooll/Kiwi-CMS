@@ -10,7 +10,6 @@ class Category(models.Model):
     """
     Model for Category
     """
-
     title = models.CharField(max_length=100, db_index=True)
     slug = models.SlugField(max_length=100, db_index=True)
 
@@ -25,7 +24,6 @@ class Post(models.Model):
     """
     Model for Posts
     """
-
     author=models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=100, unique=True)
@@ -42,3 +40,16 @@ class Post(models.Model):
     @permalink
     def get_absolute_url(self):
         return ('view_blog_post', None, { 'slug': self.slug })
+
+class Comment(models.Model):
+    """
+    Model for Comments for Posts.
+    """
+    post=models.ForeignKey(Post, on_delete=models.CASCADE)
+    name=models.CharField(max_length=100)
+    email=models.EmailField()
+    text=models.TextField()
+    date=models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return "{} --- {}".format(self.post.title, self.text)

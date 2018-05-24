@@ -1,4 +1,4 @@
-from blog.models import Post, Category
+from blog.models import Post, Category, Comment
 from tagging.models import Tag, TaggedItem
 from django.shortcuts import render_to_response, get_object_or_404
 
@@ -16,17 +16,21 @@ def view_post(request, slug):
     """
     This is use for single post page view
     """
-
-    tags = Post.objects.filter(slug=slug)[0].tags
+    post = Post.objects.filter(slug=slug)[0]
+    tags = post.tags
     if tags:
         # Remove space before and after of tag
         newTags = tags.replace(' ,', ',').replace(', ', ',').split(',')
     else:
         newTags = False
+    comments = Comment.objects.filter(post=post)
+    if not comments:
+        comments = False
 
     return render_to_response('view_post.html', {
         'post': get_object_or_404(Post, slug=slug),
-        'tags': newTags
+        'tags': newTags,
+        'comments': comments
     })
 
 def view_category(request, slug):
