@@ -31,8 +31,8 @@ class Post(models.Model):
     author=models.ForeignKey(User, on_delete=models.CASCADE,verbose_name='نویسنده')
     title = models.CharField(max_length=100, unique=True, verbose_name='عنوان')
     slug = models.SlugField(max_length=100, unique=True, help_text='نام انگلیسی برای استفاده در لینک این نوشته')
-    published_date = models.DateTimeField(auto_now_add=True)
-    modified_date = models.DateTimeField(auto_now=True)
+    published_date = models.DateTimeField(auto_now_add=True, verbose_name='زمان انتشار')
+    modified_date = models.DateTimeField(auto_now=True, verbose_name='زمان ویرایش')
     description = models.TextField(verbose_name='متن معرفی', help_text='توضیحات مختصری درباره‌ی این نوشته')
     content = RichTextUploadingField(config_name='awesome_ckeditor', verbose_name='متن اصلی', help_text='این متن در صفحه اصلی نوشته نمایش داده می‌شود')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='دسته بندی')
@@ -57,7 +57,7 @@ class Comment(models.Model):
     name=models.CharField(max_length=100, verbose_name='نام شما')
     email=models.EmailField(verbose_name='آدرس ایمیل')
     text=models.TextField(verbose_name='متن دیدگاه')
-    date=models.DateTimeField(auto_now_add=True)
+    date=models.DateTimeField(auto_now_add=True, verbose_name='زمان انتشار')
 
     def __str__(self):
         return "{} --- {}".format(self.post.title, self.text)
