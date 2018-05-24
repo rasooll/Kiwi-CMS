@@ -19,4 +19,9 @@ urlpatterns = [
         views.view_tags,
         name='view_tags_category'
         ),
+    path(
+        '<slug:slug>/',
+        views.view_page,
+        name='view_other_page'
+    )
 ]

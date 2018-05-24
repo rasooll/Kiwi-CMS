@@ -1,0 +1,8 @@
+{% extends 'base.html' %} 
+{% load jformat %}
+{% block head_title %}{{ page.title }}{% endblock %}
+{% block title %}{{ page.title }}{% endblock %}
+
+{% block content %}
+    {{ page.content|safe }}
+{% endblock %}

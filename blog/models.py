@@ -10,7 +10,7 @@ class Category(models.Model):
     """
     Model for Category
     """
-    title = models.CharField(max_length=100, db_index=True, verbose_name='عنوان')
+    title = models.CharField(max_length=100, verbose_name='عنوان')
     slug = models.SlugField(max_length=100, db_index=True, help_text='نام انگلیسی برای استفاده در لینک این دسته بندی')
 
     def __str__(self):
@@ -30,7 +30,7 @@ class Post(models.Model):
     """
     author=models.ForeignKey(User, on_delete=models.CASCADE,verbose_name='نویسنده')
     title = models.CharField(max_length=100, unique=True, verbose_name='عنوان')
-    slug = models.SlugField(max_length=100, unique=True, help_text='نام انگلیسی برای استفاده در لینک این نوشته')
+    slug = models.SlugField(max_length=100, unique=True, db_index=True, help_text='نام انگلیسی برای استفاده در لینک این نوشته')
     published_date = models.DateTimeField(auto_now_add=True, verbose_name='زمان انتشار')
     modified_date = models.DateTimeField(auto_now=True, verbose_name='زمان ویرایش')
     description = models.TextField(verbose_name='متن معرفی', help_text='توضیحات مختصری درباره‌ی این نوشته')
@@ -65,3 +65,23 @@ class Comment(models.Model):
     class Meta:
         verbose_name = 'دیدگاه'
         verbose_name_plural = 'دیدگاه ها'
+
+class Page(models.Model):
+    """
+    Model for make other page
+    """
+    title = models.CharField(max_length=100, unique=True, verbose_name='عنوان')
+    slug = models.SlugField(max_length=100, unique=True, db_index=True, help_text='نام انگلیسی برای استفاده در لینک این برگه')
+    content = RichTextUploadingField(config_name='awesome_ckeditor', verbose_name='محتوا')
+    published_date = models.DateTimeField(auto_now_add=True, verbose_name='زمان انتشار')
+
+    def __str__(self):
+        return self.title
+
+    @permalink
+    def get_absolute_url(self):
+        return ('view_other_page', None, { 'slug': self.slug })
+    
+    class Meta:
+        verbose_name = 'برگه'
+        verbose_name_plural = 'برگه‌ها'
