@@ -1,4 +1,5 @@
 {% extends 'base.html' %} 
+{% load jformat %}
 {% block head_title %}{{ post.title }}{% endblock %}
 {% block title %}{{ post.title }}{% endblock %}
 
@@ -17,7 +18,21 @@
       {% endfor %}
     </ul>
     {% endif %}
-    
+
+    {% if comments %}
+    <br />Comments:
+    <ul>
+      {% for comment in comments %}
+        <li>
+          <h3>{{ comment.name }}</h3>
+          <h6>{{ comment.date|jformat:"%Y-%m-%d %H:%M" }}</h6>
+          <p>{{ comment.text }}</p>
+        </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    No comments.
+    {% endif %}
     
 
 {% endblock %}
