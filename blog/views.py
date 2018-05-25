@@ -9,7 +9,8 @@ def index(request):
 
     return render_to_response('index.html', {
         'categories': Category.objects.all(),
-        'posts': Post.objects.all()[:5]
+        'posts': Post.objects.all()[:5],
+        'pages': Page.objects.all()
     })
 
 def view_post(request, slug):

@@ -24,4 +24,15 @@
         <p>There are no posts.</p>
     {% endif %}
 
+    <h2>Pages</h2>
+    {% if pages %}
+        <ul>
+        {% for page in pages %}
+            <li><a href="{{ page.get_absolute_url }}">{{ page.title }}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>There are no pages.</p>
+    {% endif %}
+
 {% endblock %}
