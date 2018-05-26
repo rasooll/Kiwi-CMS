@@ -171,12 +171,26 @@ class GeneralSetting(models.Model):
     Description = models.CharField(
         verbose_name='توضیحات سایت',
         max_length=300,
+        blank=True,
+        null=True,
         db_index=True
     )
     Footer = models.CharField(
         verbose_name='متن فوتر',
-        max_length=250,
+        max_length=400,
+        blank=True,
+        null=True,
         db_index=True
+    )
+    DateTypeValue=(
+        ('IR', 'جلالی'),
+        ('EN', 'میلادی'),
+    )
+    DateType = models.CharField(
+        verbose_name='نوع نمایش تاریخ در سایت',
+        max_length=2,
+        choices=DateTypeValue,
+        default='IR'
     )
     PostNumber = models.PositiveSmallIntegerField(
         verbose_name='تعداد مطالب قابل نمایش در صفحه اصلی',
