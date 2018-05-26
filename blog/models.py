@@ -10,8 +10,15 @@ class Category(models.Model):
     """
     Model for Category
     """
-    title = models.CharField(max_length=100, verbose_name='عنوان')
-    slug = models.SlugField(max_length=100, db_index=True, help_text='نام انگلیسی برای استفاده در لینک این دسته بندی')
+    title = models.CharField(
+        max_length=100,
+        verbose_name='عنوان'
+    )
+    slug = models.SlugField(
+        max_length=100,
+        db_index=True,
+        help_text='نام انگلیسی برای استفاده در لینک این دسته بندی'
+    )
 
     def __str__(self):
         return self.title
@@ -28,15 +35,48 @@ class Post(models.Model):
     """
     Model for Posts
     """
-    author=models.ForeignKey(User, on_delete=models.CASCADE,verbose_name='نویسنده')
-    title = models.CharField(max_length=100, unique=True, verbose_name='عنوان')
-    slug = models.SlugField(max_length=100, unique=True, db_index=True, help_text='نام انگلیسی برای استفاده در لینک این نوشته')
-    published_date = models.DateTimeField(auto_now_add=True, verbose_name='زمان انتشار')
-    modified_date = models.DateTimeField(auto_now=True, verbose_name='زمان ویرایش')
-    description = models.TextField(verbose_name='متن معرفی', help_text='توضیحات مختصری درباره‌ی این نوشته')
-    content = RichTextUploadingField(config_name='awesome_ckeditor', verbose_name='متن اصلی', help_text='این متن در صفحه اصلی نوشته نمایش داده می‌شود')
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='دسته بندی')
-    tags = TagField(verbose_name='برچسب‌ها', help_text='با استفاده از کاما (,) آنها را از یکدیگر جدا نمایید')
+    author=models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name='نویسنده'
+    )
+    title = models.CharField(
+        max_length=100,
+        unique=True,
+        verbose_name='عنوان'
+    )
+    slug = models.SlugField(
+        max_length=100,
+        unique=True,
+        db_index=True,
+        help_text='نام انگلیسی برای استفاده در لینک این نوشته'
+    )
+    published_date = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='زمان انتشار'
+    )
+    modified_date = models.DateTimeField(
+        auto_now=True,
+        verbose_name='زمان ویرایش'
+    )
+    description = models.TextField(
+        verbose_name='متن معرفی',
+        help_text='توضیحات مختصری درباره‌ی این نوشته'
+    )
+    content = RichTextUploadingField(
+        config_name='awesome_ckeditor',
+        verbose_name='متن اصلی',
+        help_text='این متن در صفحه اصلی نوشته نمایش داده می‌شود'
+    )
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.CASCADE,
+        verbose_name='دسته بندی'
+    )
+    tags = TagField(
+        verbose_name='برچسب‌ها',
+        help_text='با استفاده از کاما (,) آنها را از یکدیگر جدا نمایید'
+    )
 
     def __str__(self):
         return self.title
@@ -53,12 +93,29 @@ class Comment(models.Model):
     """
     Model for Comments for Posts.
     """
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, verbose_name='نوشته')
-    name = models.CharField(max_length=100, verbose_name='نام شما')
-    email = models.EmailField(verbose_name='آدرس ایمیل')
-    text = models.TextField(verbose_name='متن دیدگاه')
-    date = models.DateTimeField(auto_now_add=True, verbose_name='زمان انتشار')
-    accepted = models.BooleanField(default=False, verbose_name='تایید شده؟') 
+    post = models.ForeignKey(
+        Post,
+        on_delete=models.CASCADE,
+        verbose_name='نوشته'
+    )
+    name = models.CharField(
+        max_length=100,
+        verbose_name='نام شما'
+    )
+    email = models.EmailField(
+        verbose_name='آدرس ایمیل'
+    )
+    text = models.TextField(
+        verbose_name='متن دیدگاه'
+    )
+    date = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='زمان انتشار'
+    )
+    accepted = models.BooleanField(
+        default=False,
+        verbose_name='تایید شده؟'
+    ) 
 
     def __str__(self):
         return "{} --- {}".format(self.post.title, self.text)
@@ -71,10 +128,25 @@ class Page(models.Model):
     """
     Model for make other page
     """
-    title = models.CharField(max_length=100, unique=True, verbose_name='عنوان')
-    slug = models.SlugField(max_length=100, unique=True, db_index=True, help_text='نام انگلیسی برای استفاده در لینک این برگه')
-    content = RichTextUploadingField(config_name='awesome_ckeditor', verbose_name='محتوا')
-    published_date = models.DateTimeField(auto_now_add=True, verbose_name='زمان انتشار')
+    title = models.CharField(
+        max_length=100,
+        unique=True,
+        verbose_name='عنوان'
+    )
+    slug = models.SlugField(
+        max_length=100,
+        unique=True,
+        db_index=True,
+        help_text='نام انگلیسی برای استفاده در لینک این برگه'
+    )
+    content = RichTextUploadingField(
+        config_name='awesome_ckeditor',
+        verbose_name='محتوا'
+    )
+    published_date = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='زمان انتشار'
+    )
 
     def __str__(self):
         return self.title
@@ -86,3 +158,39 @@ class Page(models.Model):
     class Meta:
         verbose_name = 'برگه'
         verbose_name_plural = 'برگه‌ها'
+    
+class GeneralSetting(models.Model):
+    """
+    Model for general blog setting
+    """
+    Title = models.CharField(
+        verbose_name='عنوان سایت',
+        max_length=150,
+        db_index=True
+    )
+    Description = models.CharField(
+        verbose_name='توضیحات سایت',
+        max_length=300,
+        db_index=True
+    )
+    Footer = models.CharField(
+        verbose_name='متن فوتر',
+        max_length=250,
+        db_index=True
+    )
+    PostNumber = models.PositiveSmallIntegerField(
+        verbose_name='تعداد مطالب قابل نمایش در صفحه اصلی',
+        default=10
+    )
+    CommentsDisable = models.BooleanField(
+        verbose_name='غیرفعالسازی ارسال دیدگاه',
+        default=False
+    )
+    SiteClose = models.BooleanField(
+        verbose_name='سایت در دست تعمیر؟',
+        default=False
+    )
+
+    class Meta:
+        verbose_name = 'تنظیمات عمومی'
+        verbose_name_plural = 'تنظیمات عمومی'

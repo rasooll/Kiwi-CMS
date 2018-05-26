@@ -1,5 +1,5 @@
 from django.contrib import admin
-from blog.models import Post, Category, Comment, Page
+from blog.models import Post, Category, Comment, Page, GeneralSetting
 
 class BlogAdmin(admin.ModelAdmin):
     exclude = ['posted']
@@ -23,7 +23,16 @@ class PageAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
     list_display = ('title', 'slug', 'published_date')
 
+class GeneralSettingAdmin(admin.ModelAdmin):
+
+    def has_add_permission(self, request):
+        if self.model.objects.count() > 0:
+            return False
+        else:
+            return True
+
 admin.site.register(Post, BlogAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(Page, PageAdmin)
+admin.site.register(GeneralSetting, GeneralSettingAdmin)
