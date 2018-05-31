@@ -3,7 +3,11 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.index),
+    path(
+        '',
+        views.index,
+        name='index'
+        ),
     path(
         'post/<slug:slug>/',
         views.view_post,
@@ -23,5 +27,10 @@ urlpatterns = [
         '<slug:slug>/',
         views.view_page,
         name='view_other_page'
+    ),
+    path(
+        'page/<int:number>',
+        views.Pagination,
+        name='view_pagination'
     )
 ]

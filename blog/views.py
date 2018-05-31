@@ -1,17 +1,39 @@
-from blog.models import Post, Category, Comment, Page
+from blog.models import Post, Category, Comment, Page, GeneralSetting
 from tagging.models import Tag, TaggedItem
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render_to_response, get_object_or_404, redirect
+from django.core.paginator import Paginator
+
+def get_post_pagination(number):
+    """
+    This function use for get post for pagination.
+    """
+    try:
+        PNumber = GeneralSetting.objects.all()[0].PostNumber
+    except IndexError:
+        PNumber = 10
+    AllPage = Post.objects.all()
+    Pages = Paginator(AllPage, PNumber)
+    Page = Pages.get_page(number)
+    return Page
 
 def index(request):
     """
     This view use for index page of the site
     """
-
-    return render_to_response('index.html', {
-        'categories': Category.objects.all(),
-        'posts': Post.objects.all()[:5],
-        'pages': Page.objects.all()
-    })
+    Page = get_post_pagination(1)
+    HasNext = Page.has_next()
+    if HasNext:
+        NextNumber = Page.next_page_number()
+    else:
+        NextNumber = None
+    return render_to_response(
+        'index.html',
+        {
+            'page': Page,
+            'has_next': HasNext,
+            'has_previous': False,
+            'next_number': NextNumber
+        })
 
 def view_post(request, slug):
     """
@@ -68,3 +90,31 @@ def view_page(request, slug):
     return render_to_response('view_page.html', {
         'page': get_object_or_404(Page, slug=slug),
     })
+
+def Pagination(request, number):
+    """
+    This is for pagination page
+    """
+    Page = get_post_pagination(number)
+    if (Page.number < number) or (Page.number == 1):
+        return redirect('index')
+    HasPrevious = Page.has_previous()
+    if HasPrevious:
+        PreviousNumber = Page.previous_page_number()
+    else:
+        PreviousNumber = None
+    HasNext = Page.has_next()
+    if HasNext:
+        NextNumber = Page.next_page_number()
+    else:
+        NextNumber = None
+    return render_to_response(
+        'index.html',
+        {
+            'page': Page,
+            'has_previous': HasPrevious,
+            'has_next': HasNext,
+            'previous_number': PreviousNumber,
+            'next_number': NextNumber
+        }
+    )
