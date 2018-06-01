@@ -1,5 +1,5 @@
 from django.contrib import admin
-from blog.models import Post, Category, Comment, Page, GeneralSetting
+from blog.models import Post, Category, Comment, Page, GeneralSetting, Navbar
 
 class BlogAdmin(admin.ModelAdmin):
     exclude = ['posted']
@@ -40,8 +40,13 @@ class GeneralSettingAdmin(admin.ModelAdmin):
         else:
             return True
 
+class NavbarAdmin(admin.ModelAdmin):
+    list_display = ('title', 'ordering',)
+    list_editable = ('ordering',)
+
 admin.site.register(Post, BlogAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(Page, PageAdmin)
 admin.site.register(GeneralSetting, GeneralSettingAdmin)
+admin.site.register(Navbar, NavbarAdmin)

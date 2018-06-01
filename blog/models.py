@@ -88,6 +88,7 @@ class Post(models.Model):
     class Meta:
         verbose_name = 'نوشته'
         verbose_name_plural = 'نوشته ها'
+        ordering = ['published_date']
 
 class Comment(models.Model):
     """
@@ -208,3 +209,19 @@ class GeneralSetting(models.Model):
     class Meta:
         verbose_name = 'تنظیمات عمومی'
         verbose_name_plural = 'تنظیمات عمومی'
+
+class Navbar(models.Model):
+    """
+    This model use for navbar item.
+    """
+    title = models.CharField(verbose_name='عنوان', max_length=60)
+    page = models.ForeignKey(Page, verbose_name='برگه', on_delete=models.CASCADE)
+    ordering = models.PositiveSmallIntegerField(verbose_name='چیدمان', default=0)
+
+    def __str__(self):
+        return self.title
+    
+    class Meta:
+        verbose_name = 'آیتم'
+        verbose_name_plural = 'فهرست'
+        ordering = ['ordering']
