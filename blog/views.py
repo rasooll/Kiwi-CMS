@@ -16,6 +16,21 @@ def get_post_pagination(number):
     Page = Pages.get_page(number)
     return Page
 
+def Get_general_settings():
+    """
+    This function use for get general site settings from database
+    and use this in views.
+    """
+    try:
+        settings = GeneralSetting.objects.all()[0]
+    except IndexError:
+        """
+        User does not make general setting from admin site.
+        """
+        settings = False
+    return settings
+settings = Get_general_settings()
+
 def index(request):
     """
     This view use for index page of the site
@@ -30,6 +45,7 @@ def index(request):
         'index.html',
         {
             'page': Page,
+            'settings': settings,
             'has_next': HasNext,
             'has_previous': False,
             'next_number': NextNumber
@@ -53,7 +69,8 @@ def view_post(request, slug):
     return render_to_response('view_post.html', {
         'post': get_object_or_404(Post, slug=slug),
         'tags': newTags,
-        'comments': comments
+        'comments': comments,
+        'settings': settings
     })
 
 def view_category(request, slug):
@@ -64,6 +81,7 @@ def view_category(request, slug):
     category = get_object_or_404(Category, slug=slug)
     return render_to_response('view_category.html', {
         'category': category,
+        'settings': settings,
         'posts': Post.objects.filter(category=category)[:5]
     })
 
@@ -80,6 +98,7 @@ def view_tags(request, name):
         posts.append(object2[0])
     return render_to_response('view_tag.html', {
         'posts': posts,
+        'settings': settings,
         'tag': name
     })
 
@@ -89,6 +108,7 @@ def view_page(request, slug):
     """
     return render_to_response('view_page.html', {
         'page': get_object_or_404(Page, slug=slug),
+        'settings': settings
     })
 
 def Pagination(request, number):
@@ -112,6 +132,7 @@ def Pagination(request, number):
         'index.html',
         {
             'page': Page,
+            'settings': settings,
             'has_previous': HasPrevious,
             'has_next': HasNext,
             'previous_number': PreviousNumber,
