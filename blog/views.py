@@ -2,6 +2,7 @@ from blog.models import Post, Category, Comment, Page, GeneralSetting, Navbar
 from tagging.models import Tag, TaggedItem
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.core.paginator import Paginator
+from django.core.exceptions import ObjectDoesNotExist
 
 def get_post_pagination(number):
     """
@@ -50,6 +51,14 @@ def view_post(request, slug):
     comments = Comment.objects.filter(post=post)
     if not comments:
         comments = False
+    else:
+        n=0
+        for cm in comments:
+            if cm.accepted:
+                n=n+1
+                break
+        if (n == 0):
+            comments = False
 
     return render_to_response('view_post.html', {
         'post': get_object_or_404(Post, slug=slug),
@@ -71,15 +80,20 @@ def view_tags(request, name):
     """
     This is use for view all post when this tag include on this posts. 
     """
-    tagid = get_object_or_404(Tag, name=name)
-    posts_tag = TaggedItem.objects.filter(tag_id=tagid)
-    posts = []
-    for post in posts_tag:
-        object2 = Post.objects.filter(id=post.object_id)
-        posts.append(object2[0])
+    try:
+        tagid = Tag.objects.get(name=name)
+    except ObjectDoesNotExist:
+        tagid = False
+    if tagid:
+        posts = TaggedItem.objects.filter(tag_id=tagid)
+        count = posts.count()
+    else:
+        posts = False
+        count = 0
     return render_to_response('view_tag.html', {
         'posts': posts,
-        'tag': name
+        'tag': name,
+        'count': count
     })
 
 def view_page(request, slug):
