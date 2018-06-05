@@ -464,7 +464,7 @@ overflow: hidden;
 .comments div.alert-warning{
   text-align: center;
   font-size: 15px;
-  margin: 20px 10px;
+  margin: 20px 0px;
 }
 
 /* If comment */
