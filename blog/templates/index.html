@@ -1,38 +1,40 @@
 {% extends 'base.html' %}
-{% block title %}Welcome to my blog{% endblock %}
+{% load jformat %}
+
+<!-- Page Title -->
+{% block head_title %}
+{% if page.number == 1 %}صفحه اصلی{% else %}صفحه {{ page.number }}{% endif %}
+{% endblock %}
+
+
 
 {% block content %}
-    <h2>Categories</h2>
-    {% if categories %}
-        <ul>
-        {% for category in categories %}
-            <li><a href="{{ category.get_absolute_url }}">{{ category.title }}</a></li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>There are no posts.</p>
+  {% for post in page %}
+    <div class="post-preview">
+      <a href="{{ post.get_absolute_url }}">
+        <h2 class="post-title">
+          {{ post.title }}
+        </h2>
+        {% if post.description %}
+        <h3 class="post-subtitle">
+          {{ post.description }}
+        </h3>
+        {% endif %}
+      </a>
+      <p class="post-meta">نوشته شده توسط {{ post.author }} در {{ post.published_date|jformat:"%d %B %Y" }} </p>
+    </div>
+    {% if not forloop.last %}
+      <hr>
     {% endif %}
+  {% endfor %}
 
-    <h2>Posts</h2>
-    {% if posts %}
-        <ul>
-        {% for post in posts %}
-            <li><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>There are no posts.</p>
-    {% endif %}
-
-    <h2>Pages</h2>
-    {% if pages %}
-        <ul>
-        {% for page in pages %}
-            <li><a href="{{ page.get_absolute_url }}">{{ page.title }}</a></li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>There are no pages.</p>
-    {% endif %}
-
-{% endblock %}
+    <!-- Pager -->
+    <div class="clearfix">
+      {% if has_next %}
+      <a class="btn btn-primary float-right" href="{% url 'view_pagination' next_number %}">صفحه بعدی</a>
+      {% endif %}
+      {% if has_previous %}
+      <a class="btn btn-primary float-left" href="{% url 'view_pagination' previous_number %}">صفحه قبلی</a>
+      {% endif %}
+    </div>
+  {% endblock %}

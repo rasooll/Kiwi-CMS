@@ -1,38 +1,50 @@
 {% extends 'base.html' %} 
 {% load jformat %}
 {% block head_title %}{{ post.title }}{% endblock %}
-{% block title %}{{ post.title }}{% endblock %}
 
 {% block content %}
+
+    <h1>{{ post.title }}</h1>
+
     {{ post.content|safe }}
     
     {% if tags %}
-    <br />Tags:
-    <ul>
-      {% for tag in tags %}
-        <li>
-          <a href="/tag/{{ tag }}">
-            {{ tag }}
-          </a>
-        </li>
-      {% endfor %}
-    </ul>
+    <br />
+    <div class="tags">
+      <label>برچسب ها :</label> 
+      <ul>
+        {% for tag in tags %}
+          <li>
+            <a href="{% url 'view_tags_category' tag %}">
+              {{ tag }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
     {% endif %}
 
     {% if comments %}
-    <br />Comments:
-    <ul>
-      {% for comment in comments %}
-        <li>
-          <h3>{{ comment.name }}</h3>
-          <h6>{{ comment.date|jformat:"%Y-%m-%d %H:%M" }}</h6>
-          <p>{{ comment.text }}</p>
-        </li>
-      {% endfor %}
-    </ul>
+      <br />
+      <div class="comments">
+        <label>دیدگاه‌ها :</label>
+        <ul>
+          {% for comment in comments %}
+            <li>
+              <h5>{{ comment.name }}</h5>
+              <div class="date">نوشته شده در {{ comment.date|jformat:"%d %B %Y" }}</div>
+              <hr />
+              <div>{{ comment.text }}</div>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
     {% else %}
-    No comments.
+      <div class="comments">
+        <div class="alert alert-warning" role="alert">
+          <strong>هیچ دیدگاهی وجود ندارد</strong>
+        </div>
+      </div>
     {% endif %}
-    
 
 {% endblock %}

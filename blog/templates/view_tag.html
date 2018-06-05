@@ -1,16 +1,31 @@
 {% extends 'base.html' %} 
-{% block head_title %}Viewing tags{% endblock %}
-{% block title %}TAG: {{ tag }}{% endblock %}
+{% load jformat %}
+{% block head_title %}تگ: {{ tag }}{% endblock %}
 
 {% block content %}
+    <h4>برچسب: {{ tag }}</h4>
+    <h6>تعداد مطالب: {{ count }}</h6>
+    {% if posts %}
     <ul>
         {% for post in posts %}
-            <li>
-                <a href="{{ post.get_absolute_url }}">
-                    {{ post.title }}
-                </a>
-            </li>
+            <div class="post-preview">
+            <a href="{{ post.object.get_absolute_url }}">
+                <h2 class="post-title">
+                {{ post.object.title }}
+                </h2>
+                {% if post.object.description %}
+                <h3 class="post-subtitle">
+                {{ post.object.description }}
+                </h3>
+                {% endif %}
+            </a>
+            <p class="post-meta">نوشته شده توسط {{ post.object.author }} در {{ post.object.published_date|jformat:"%d %B %Y" }} </p>
+            </div>
+            {% if not forloop.last %}
+            <hr>
+            {% endif %}
         {% endfor %}
     </ul>
+    {% endif %}
     
 {% endblock %}
