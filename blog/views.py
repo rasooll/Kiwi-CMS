@@ -4,6 +4,7 @@ from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.core.paginator import Paginator
 from django.core.exceptions import ObjectDoesNotExist
 from .forms import SendComment
+from django.http import Http404
 
 def get_post_pagination(number):
     """
@@ -42,7 +43,10 @@ def view_post(request, slug):
     """
     This is use for single post page view
     """
-    post = Post.objects.filter(slug=slug)[0]
+    try:
+        post = Post.objects.get(slug=slug)
+    except ObjectDoesNotExist:
+        raise Http404
     tags = post.tags
     if tags:
         # Remove space before and after of tag
