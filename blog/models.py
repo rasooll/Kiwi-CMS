@@ -133,6 +133,7 @@ class Comment(models.Model):
     class Meta:
         verbose_name = 'دیدگاه'
         verbose_name_plural = 'دیدگاه ها'
+        ordering = ['-date']
 
 class Page(models.Model):
     """
