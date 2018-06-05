@@ -192,16 +192,6 @@ class GeneralSetting(models.Model):
         null=True,
         db_index=True
     )
-    DateTypeValue=(
-        ('IR', 'جلالی'),
-        ('EN', 'میلادی'),
-    )
-    DateType = models.CharField(
-        verbose_name='نوع نمایش تاریخ در سایت',
-        max_length=2,
-        choices=DateTypeValue,
-        default='IR'
-    )
     PostNumber = models.PositiveSmallIntegerField(
         verbose_name='تعداد مطالب قابل نمایش در صفحه اصلی',
         default=10
