@@ -48,17 +48,9 @@ def view_post(request, slug):
         newTags = tags.replace(' ,', ',').replace(', ', ',').split(',')
     else:
         newTags = False
-    comments = Comment.objects.filter(post=post)
+    comments = Comment.objects.filter(post=post, accepted=True)
     if not comments:
         comments = False
-    else:
-        n=0
-        for cm in comments:
-            if cm.accepted:
-                n=n+1
-                break
-        if (n == 0):
-            comments = False
 
     return render_to_response('view_post.html', {
         'post': get_object_or_404(Post, slug=slug),
