@@ -112,6 +112,16 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'fa-IR'
 
+"""
+If you get 'locale.Error: unsupported locale setting' error:
+
+$ sudo locale-gen 'fa_IR'
+$ sudo locale-gen 'fa_IR.UTF-8'
+$ sudo update-locale
+"""
+import locale
+locale.setlocale(locale.LC_ALL, "fa_IR")
+
 TIME_ZONE = 'Asia/Tehran'
 
 USE_I18N = True

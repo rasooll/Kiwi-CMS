@@ -3,6 +3,7 @@ from django.db.models import permalink
 from django.contrib.auth.models import User
 from tagging.fields import TagField
 from ckeditor_uploader.fields import RichTextUploadingField
+from django_jalali.db import models as jmodels
 
 # Create your models here.
 
@@ -51,11 +52,11 @@ class Post(models.Model):
         db_index=True,
         help_text='نام انگلیسی برای استفاده در لینک این نوشته'
     )
-    published_date = models.DateTimeField(
+    published_date = jmodels.jDateTimeField(
         auto_now_add=True,
         verbose_name='زمان انتشار'
     )
-    modified_date = models.DateTimeField(
+    modified_date = jmodels.jDateTimeField(
         auto_now=True,
         verbose_name='زمان ویرایش'
     )
@@ -80,6 +81,10 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_date(self):
+        return self.published_date.strftime("%d %B %Y %H:%M")
+    get_date.short_description = 'زمان انتشار'
 
     @permalink
     def get_absolute_url(self):
@@ -109,7 +114,7 @@ class Comment(models.Model):
     text = models.TextField(
         verbose_name='متن دیدگاه'
     )
-    date = models.DateTimeField(
+    date = jmodels.jDateTimeField(
         auto_now_add=True,
         verbose_name='زمان انتشار'
     )
@@ -118,8 +123,12 @@ class Comment(models.Model):
         verbose_name='تایید شده؟'
     ) 
 
+    def get_date(self):
+        return self.date.strftime("%d %B %Y %H:%M")
+    get_date.short_description = 'زمان انتشار'
+
     def __str__(self):
-        return "{} --- {}".format(self.post.title, self.text)
+        return "{} --- {}".format(self.post.title, self.name)
 
     class Meta:
         verbose_name = 'دیدگاه'
@@ -144,7 +153,7 @@ class Page(models.Model):
         config_name='awesome_ckeditor',
         verbose_name='محتوا'
     )
-    published_date = models.DateTimeField(
+    published_date = jmodels.jDateTimeField(
         auto_now_add=True,
         verbose_name='زمان انتشار'
     )

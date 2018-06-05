@@ -1,11 +1,14 @@
 from django.contrib import admin
 from blog.models import Post, Category, Comment, Page, GeneralSetting, Navbar
+from django_jalali.admin.filters import JDateFieldListFilter
+#you need import this for adding jalali calander widget
+import django_jalali.admin as jadmin
 
 class BlogAdmin(admin.ModelAdmin):
     exclude = ['posted']
     prepopulated_fields = {'slug': ('title',)}
-    list_display = ('title', 'author', 'published_date', 'category', 'tags')
-    list_filter = ('published_date','category',)
+    list_display = ('title', 'author', 'get_date', 'category', 'tags')
+    list_filter = (('published_date', JDateFieldListFilter),'category',)
     search_fields = ('title', 'slug', 'tags')
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -21,9 +24,9 @@ def make_unaccepted(modeladmin, request, queryset):
 make_unaccepted.short_description = "عدم تایید دیدگاه‌های انتخاب شده"
 
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('name', 'post', 'text', 'accepted', 'date')
+    list_display = ('name', 'post', 'text', 'accepted', 'get_date')
     #list_editable = ('accepted',)
-    list_filter = ('date','accepted',)
+    list_filter = (('date', JDateFieldListFilter),'accepted')
     search_fields = ('text', 'post')
     raw_id_fields = ('post',)
     actions = (make_accepted,make_unaccepted,)
