@@ -1,6 +1,6 @@
 from blog.models import Post, Category, Comment, Page, GeneralSetting, Navbar
 from tagging.models import Tag, TaggedItem
-from django.shortcuts import render_to_response, get_object_or_404, redirect
+from django.shortcuts import render_to_response, get_object_or_404, redirect,render
 from django.core.paginator import Paginator
 from django.core.exceptions import ObjectDoesNotExist
 from .forms import SendComment
@@ -57,7 +57,14 @@ def view_post(request, slug):
     if not comments:
         comments = False
     form = SendComment()
-    return render_to_response('view_post.html', {
+    if request.method == 'POST':
+        submitForm = SendComment(request.POST)
+        formData = submitForm.save(commit=False)
+        formData.post = post
+        formData.accepted = False
+        formData.save()
+
+    return render(request, 'view_post.html', {
         'post': get_object_or_404(Post, slug=slug),
         'tags': newTags,
         'comments': comments,
