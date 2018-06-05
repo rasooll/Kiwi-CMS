@@ -3,6 +3,7 @@ from tagging.models import Tag, TaggedItem
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.core.paginator import Paginator
 from django.core.exceptions import ObjectDoesNotExist
+from .forms import SendComment
 
 def get_post_pagination(number):
     """
@@ -51,11 +52,12 @@ def view_post(request, slug):
     comments = Comment.objects.filter(post=post, accepted=True)
     if not comments:
         comments = False
-
+    form = SendComment()
     return render_to_response('view_post.html', {
         'post': get_object_or_404(Post, slug=slug),
         'tags': newTags,
-        'comments': comments
+        'comments': comments,
+        'form': form
     })
 
 def view_category(request, slug):
