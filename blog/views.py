@@ -56,19 +56,29 @@ def view_post(request, slug):
     comments = Comment.objects.filter(post=post, accepted=True)
     if not comments:
         comments = False
-    form = SendComment()
+    formSuccess = False
+    err = {}
+    formValue = {}
     if request.method == 'POST':
         submitForm = SendComment(request.POST)
-        formData = submitForm.save(commit=False)
-        formData.post = post
-        formData.accepted = False
-        formData.save()
+        if submitForm.is_valid():
+            formSuccess = True
+            formData = submitForm.save(commit=False)
+            formData.post = post
+            formData.accepted = False
+            formData.save()
+        else:
+            err = submitForm.errors
+            formValue = submitForm.cleaned_data
+            
 
     return render(request, 'view_post.html', {
         'post': get_object_or_404(Post, slug=slug),
         'tags': newTags,
         'comments': comments,
-        'form': form
+        'formSuccess': formSuccess,
+        'err': err,
+        'formValue': formValue
     })
 
 def view_category(request, slug):

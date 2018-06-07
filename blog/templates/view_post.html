@@ -4,6 +4,32 @@
 
 {% block content %}
 
+  {% if formSuccess %}
+    <div class="alert alert-success alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <strong>دیدگاه شما با موفقیت ارسال شد.</strong> 
+      <div>این دیدگاه پس از تایید توسط مدیریت در سایت نمایش داده خواهد شد.</div>
+    </div>
+    <script>
+      $(".alert").alert();
+    </script>
+  {% endif %}
+
+  {% if err %}
+    <div class="alert alert-danger alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <strong>خطا</strong> <br />
+      برای مشاهده نوع خطا به بخش ارسال دیدگاه مراجعه کنید.
+    </div>
+    <script>
+      $(".alert").alert();
+    </script>
+  {% endif %}
+
     <h1>{{ post.title }}</h1>
 
     {{ post.content|safe }}
@@ -43,22 +69,25 @@
                     <div class="col-md-5">
                       <div>
                         <label>نام شما: </label>
-                        {{ form.name }}
+                        <input name="name" class="form-control" value="{{ formValue.name }}" maxlength="100" required="" id="id_name" type="text">
+                        {{ err.name }}
                       </div>
                       <div>
                         <label> ایمیل شما:</label>
-                        {{ form.email }}
+                        <input name="email" class="form-control" value="{{ formValue.email }}" maxlength="254" required="" id="id_email" type="text">
+                        {{ err.email }}
                       </div>
                     </div>
                     <div class="col-md-7">
                       <label>دیدگاه شما:</label>
-                      {{ form.text }}
+                      <textarea name="text" cols="40" rows="4" class="form-control" required="" id="id_text">{{formValue.text}}</textarea>
+                      {{ err.text }}
+                      <div align="left" style="margin-top: 12px;">
+                        <button type="submit" class="btn btn-dark">ارسال</button>
+                      </div>
                     </div>
                     
                   </div>
-                </div>
-                <div align="left">
-                  <button type="submit" class="btn btn-dark">ارسال</button>
                 </div>
             </form>
           </div>

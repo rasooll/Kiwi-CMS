@@ -484,3 +484,10 @@ overflow: hidden;
   font-size: 14px;
   color: #555;
 }
+ul.errorlist{
+  color: #cc004e;
+  list-style: '*';
+  padding: 0px;
+  margin: 0px;
+  font-size: 12px;
+}
