@@ -15,21 +15,24 @@ class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
     list_display = ('title', 'slug')
 
-def make_accepted(modeladmin, request, queryset):
-    queryset.update(accepted=True)
-make_accepted.short_description = "تایید دیدگاه‌های انتخاب شده"
 
-def make_unaccepted(modeladmin, request, queryset):
-    queryset.update(accepted=False)
-make_unaccepted.short_description = "عدم تایید دیدگاه‌های انتخاب شده"
 
 class CommentAdmin(admin.ModelAdmin):
+    def make_accepted(modeladmin, request, queryset):
+        queryset.update(accepted=True)
+    make_accepted.short_description = "تایید دیدگاه‌های انتخاب شده"
+
+    def make_unaccepted(modeladmin, request, queryset):
+        queryset.update(accepted=False)
+    make_unaccepted.short_description = "عدم تایید دیدگاه‌های انتخاب شده"
     list_display = ('name', 'post', 'text', 'accepted', 'get_date')
     #list_editable = ('accepted',)
     list_filter = (('date', JDateFieldListFilter),'accepted')
     search_fields = ('text', 'post')
-    raw_id_fields = ('post',)
+    #raw_id_fields = ('post',)
     actions = (make_accepted,make_unaccepted,)
+    fields = ('accepted', 'post', 'name', 'email','text',)
+    readonly_fields = ('post', 'name', 'email', 'text',)
 
 class PageAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
