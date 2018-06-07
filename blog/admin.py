@@ -15,8 +15,6 @@ class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
     list_display = ('title', 'slug')
 
-
-
 class CommentAdmin(admin.ModelAdmin):
     def make_accepted(modeladmin, request, queryset):
         queryset.update(accepted=True)
