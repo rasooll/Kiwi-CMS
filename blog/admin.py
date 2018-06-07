@@ -33,7 +33,7 @@ class CommentAdmin(admin.ModelAdmin):
 
 class PageAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
-    list_display = ('title', 'slug', 'published_date')
+    list_display = ('title', 'slug', 'get_date')
 
 class GeneralSettingAdmin(admin.ModelAdmin):
 

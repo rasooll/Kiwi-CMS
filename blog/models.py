@@ -83,7 +83,7 @@ class Post(models.Model):
         return self.title
 
     def get_date(self):
-        return self.published_date.strftime("%d %B %Y %H:%M")
+        return self.published_date.strftime("%d %B %Y")
     get_date.short_description = 'زمان انتشار'
 
     @permalink
@@ -124,7 +124,7 @@ class Comment(models.Model):
     ) 
 
     def get_date(self):
-        return self.date.strftime("%d %B %Y %H:%M")
+        return self.date.strftime("%d %B %Y")
     get_date.short_description = 'زمان انتشار'
 
     def __str__(self):
@@ -166,6 +166,10 @@ class Page(models.Model):
     def get_absolute_url(self):
         return ('view_other_page', None, { 'slug': self.slug })
     
+    def get_date(self):
+        return self.published_date.strftime("%d %B %Y")
+    get_date.short_description = 'زمان انتشار'
+
     class Meta:
         verbose_name = 'برگه'
         verbose_name_plural = 'برگه‌ها'
