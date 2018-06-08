@@ -70,12 +70,15 @@ def view_post(request, slug):
         else:
             err = submitForm.errors
             formValue = submitForm.cleaned_data
+    else:
+        submitForm = SendComment()
             
 
     return render(request, 'view_post.html', {
         'post': get_object_or_404(Post, slug=slug),
         'tags': newTags,
         'comments': comments,
+        'form': submitForm,
         'formSuccess': formSuccess,
         'err': err,
         'formValue': formValue
