@@ -3,8 +3,9 @@ from tagging.models import Tag, TaggedItem
 from django.shortcuts import render_to_response, get_object_or_404, redirect,render
 from django.core.paginator import Paginator
 from django.core.exceptions import ObjectDoesNotExist
-from .forms import SendComment
 from django.http import Http404
+from .forms import SendComment
+from . import utils
 
 def get_post_pagination(number):
     """
@@ -61,7 +62,7 @@ def view_post(request, slug):
     formValue = {}
     if request.method == 'POST':
         submitForm = SendComment(request.POST)
-        if submitForm.is_valid():
+        if submitForm.is_valid() and utils.reCAPTCHA_is_valid(request) :
             formSuccess = True
             formData = submitForm.save(commit=False)
             formData.post = post
@@ -69,6 +70,8 @@ def view_post(request, slug):
             formData.save()
         else:
             err = submitForm.errors
+            if not utils.reCAPTCHA_is_valid(request):
+                err['captcha'] = '<ul class="errorlist"><li>* تشخیص مقابله با ربات صورت نگرفت. </li></ul>'
             formValue = submitForm.cleaned_data
     else:
         submitForm = SendComment()
@@ -81,7 +84,8 @@ def view_post(request, slug):
         'form': submitForm,
         'formSuccess': formSuccess,
         'err': err,
-        'formValue': formValue
+        'formValue': formValue,
+        'captcha_key': utils.reCAPTCHA_Public_Key()
     })
 
 def view_category(request, slug):

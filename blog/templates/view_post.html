@@ -82,11 +82,17 @@
                       <label>دیدگاه شما:</label>
                       {{ form.text }}
                       {{ err.text }}
-                      <div align="left" style="margin-top: 12px;">
-                        <button type="submit" class="btn btn-dark">ارسال</button>
-                      </div>
                     </div>
-                    
+                  </div>
+                  <div class="row captcha-row">
+                    <div class="col-md-6">
+                      <script src='https://www.google.com/recaptcha/api.js'></script>
+                      <div class="g-recaptcha" data-sitekey="{{ captcha_key }}"></div>
+                      {{ err.captcha|safe }}
+                    </div>
+                    <div class="col-md-6">
+                      <button type="submit" class="btn btn-dark sendcommentbtn">ارسال</button>
+                    </div>
                   </div>
                 </div>
             </form>
