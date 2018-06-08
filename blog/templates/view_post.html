@@ -69,18 +69,18 @@
                     <div class="col-md-5">
                       <div>
                         <label>نام شما: </label>
-                        <input name="name" class="form-control" value="{{ formValue.name }}" maxlength="100" required="" id="id_name" type="text">
+                        {{ form.name }}
                         {{ err.name }}
                       </div>
                       <div>
                         <label> ایمیل شما:</label>
-                        <input name="email" class="form-control" value="{{ formValue.email }}" maxlength="254" required="" id="id_email" type="text">
+                        {{ form.email }}
                         {{ err.email }}
                       </div>
                     </div>
                     <div class="col-md-7">
                       <label>دیدگاه شما:</label>
-                      <textarea name="text" cols="40" rows="4" class="form-control" required="" id="id_text">{{formValue.text}}</textarea>
+                      {{ form.text }}
                       {{ err.text }}
                       <div align="left" style="margin-top: 12px;">
                         <button type="submit" class="btn btn-dark">ارسال</button>
