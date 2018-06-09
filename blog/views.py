@@ -1,6 +1,7 @@
 from blog.models import Post, Category, Comment, Page, GeneralSetting, Navbar
 from tagging.models import Tag, TaggedItem
-from django.shortcuts import render_to_response, get_object_or_404, redirect,render
+from django.shortcuts import render_to_response, render
+from django.shortcuts import get_object_or_404, redirect
 from django.core.paginator import Paginator
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
@@ -71,7 +72,13 @@ def view_post(request, slug):
         else:
             err = submitForm.errors
             if not utils.reCAPTCHA_is_valid(request):
-                err['captcha'] = '<ul class="errorlist"><li>* تشخیص مقابله با ربات صورت نگرفت. </li></ul>'
+                err['captcha'] = '''
+                    <ul class="errorlist">
+                        <li>
+                            تشخیص مقابله با ربات صورت نگرفت.
+                        </li>
+                    </ul>
+                '''
             formValue = submitForm.cleaned_data
     else:
         submitForm = SendComment()
