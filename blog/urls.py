@@ -32,5 +32,10 @@ urlpatterns = [
         'page/<int:number>',
         views.Pagination,
         name='view_pagination'
+    ),
+    path(
+        'user/register/',
+        views.user_registration,
+        name='user_registeration'
     )
 ]

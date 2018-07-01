@@ -1,0 +1,54 @@
+{% extends 'base.html' %} 
+{% load jformat %}
+
+<!-- Page Title -->
+{% block head_title %}عضویت{% endblock %}
+
+{% block content %}
+
+    <h1>عضویت</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <div class="row">
+                <div class="col-12 col-md-12 col-lg-8">
+                    <div>
+                        <label>نام</label>
+                        {{ form.first_name }} {{ err.first_name }}
+                    </div>
+                    <div>
+                        <label>نام خانوادگی</label>
+                        {{ form.last_name }} {{ err.last_name }}
+                    </div>
+                    <div>
+                        <label>آدرس ایمیل</label>
+                        {{ form.email }}
+                        {{ err.email }}
+                    </div>
+                    <div>
+                        <label>نام کاربری</label>
+                        {{ form.username }}
+                        {{ err.username }}
+                    </div>
+                    <div>
+                        <label>کلمه عبور</label>
+                        {{ form.password1 }}
+                        {{ err.password1 }}
+                    </div>
+                    <div>
+                        <label>تکرار کلمه عبور</label>
+                        {{ form.password2 }}
+                        {{ err.password2 }}
+                    </div>
+                    <div class="captcha-row">
+                        <script src='https://www.google.com/recaptcha/api.js?hl=fa'></script>
+                        <div class="g-recaptcha" data-sitekey="{{ captcha_key }}"></div>
+                        {{ err.captcha|safe }}
+                    </div>
+                    
+                </div>
+            </div>
+            <button type="submit" class="btn btn-dark sendcommentbtn">عضویت</button>
+        </div>
+    </form>
+{% endblock %}

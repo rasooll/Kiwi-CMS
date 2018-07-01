@@ -5,7 +5,8 @@ from django.shortcuts import get_object_or_404, redirect
 from django.core.paginator import Paginator
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
-from .forms import SendComment
+from django.contrib.auth import login, authenticate
+from .forms import SendComment, SignUpForm
 from . import utils
 
 def get_post_pagination(number):
@@ -20,7 +21,6 @@ def get_post_pagination(number):
     Pages = Paginator(AllPage, PNumber)
     Page = Pages.get_page(number)
     return Page
-
 
 def index(request):
     """
@@ -82,7 +82,6 @@ def view_post(request, slug):
             formValue = submitForm.cleaned_data
     else:
         submitForm = SendComment()
-            
 
     return render(request, 'view_post.html', {
         'post': get_object_or_404(Post, slug=slug),
@@ -160,3 +159,37 @@ def Pagination(request, number):
             'next_number': NextNumber
         }
     )
+
+def user_registration(request):
+    """
+    This view user for user registration.
+    """
+
+    err = {}
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid() and utils.reCAPTCHA_is_valid(request):
+            form.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_password)
+            login(request, user)
+            return redirect('index')
+
+        else:
+            err = form.errors
+            if not utils.reCAPTCHA_is_valid(request):
+                err['captcha'] = '''
+                    <ul class="errorlist">
+                        <li>
+                            تشخیص مقابله با ربات صورت نگرفت.
+                        </li>
+                    </ul>
+                '''
+    else:
+        form = SignUpForm()
+    return render(request, 'user_register.html', {
+        'form': form,
+        'err': err,
+        'captcha_key': utils.reCAPTCHA_Public_Key()
+        })
