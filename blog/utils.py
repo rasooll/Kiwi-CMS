@@ -18,3 +18,10 @@ def reCAPTCHA_is_valid(request):
 
 def reCAPTCHA_Public_Key():
     return settings.RECAPTCHA_PUBLIC_KEY
+
+def reCAPTCHA_Script():
+    script = """
+        <script src='https://www.google.com/recaptcha/api.js?hl=fa'></script>
+        <div class="g-recaptcha" data-sitekey="{}"></div>
+    """.format(settings.RECAPTCHA_PUBLIC_KEY)
+    return script
