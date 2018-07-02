@@ -1,0 +1,14 @@
+{% extends 'base.html' %} 
+{% load jformat %}
+
+<!-- Page Title -->
+{% block head_title %}{{ page.title }}{% endblock %}
+
+{% block content %}
+<center>
+  <div class="alert alert-success" role="alert">
+    <strong>ثبت نام شما با موفقیت انجام شد.</strong><br />
+    <a href="{% url 'index' %}" class="my-alert-link">بازگشت به صفحه اصلی</a>
+  </div>
+</center>
+{% endblock %}

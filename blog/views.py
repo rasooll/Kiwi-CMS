@@ -5,8 +5,8 @@ from django.shortcuts import get_object_or_404, redirect
 from django.core.paginator import Paginator
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
-from django.contrib.auth import login, authenticate
-from .forms import SendComment, SignUpForm
+from django.contrib.auth import login, logout, authenticate
+from .forms import SendComment, SignUpForm, UserLogin
 from . import utils
 
 def get_post_pagination(number):
@@ -32,7 +32,8 @@ def index(request):
         NextNumber = Page.next_page_number()
     else:
         NextNumber = None
-    return render_to_response(
+    return render(
+        request,
         'index.html',
         {
             'page': Page,
@@ -91,7 +92,7 @@ def view_post(request, slug):
         'formSuccess': formSuccess,
         'err': err,
         'formValue': formValue,
-        'captcha_key': utils.reCAPTCHA_Public_Key()
+        'recaptcha': utils.reCAPTCHA_Script()
     })
 
 def view_category(request, slug):
@@ -99,7 +100,9 @@ def view_category(request, slug):
     This is use for view all post of one category.
     """
     category = get_object_or_404(Category, slug=slug)
-    return render_to_response('view_category.html', {
+    return render(
+        request,
+        'view_category.html', {
         'category': category,
         'posts': Post.objects.filter(category=category)[:5]
     })
@@ -118,7 +121,9 @@ def view_tags(request, name):
     else:
         posts = False
         count = 0
-    return render_to_response('view_tag.html', {
+    return render(
+        request,
+        'view_tag.html', {
         'posts': posts,
         'tag': name,
         'count': count
@@ -128,7 +133,9 @@ def view_page(request, slug):
     """
     This is use for other page view
     """
-    return render_to_response('view_page.html', {
+    return render(
+        request,
+        'view_page.html', {
         'page': get_object_or_404(Page, slug=slug)
     })
 
@@ -149,7 +156,8 @@ def Pagination(request, number):
         NextNumber = Page.next_page_number()
     else:
         NextNumber = None
-    return render_to_response(
+    return render(
+        request,
         'index.html',
         {
             'page': Page,
@@ -165,6 +173,8 @@ def user_registration(request):
     This view user for user registration.
     """
 
+    if request.user.is_authenticated:
+        return redirect('index')
     err = {}
     if request.method == 'POST':
         form = SignUpForm(request.POST)
@@ -174,7 +184,7 @@ def user_registration(request):
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
             login(request, user)
-            return redirect('index')
+            return render(request, 'user_registeration_done.html')
 
         else:
             err = form.errors
@@ -191,5 +201,51 @@ def user_registration(request):
     return render(request, 'user_register.html', {
         'form': form,
         'err': err,
-        'captcha_key': utils.reCAPTCHA_Public_Key()
+        'recaptcha': utils.reCAPTCHA_Script()
         })
+
+def user_login(request):
+    """
+    This view use for login page.
+    """
+    err = {}
+    user = None
+    if request.user.is_authenticated:
+        return redirect('index')
+    if request.method == 'POST':
+        form = UserLogin(request.POST)
+        if form.is_valid() and utils.reCAPTCHA_is_valid(request):
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(request, username=username, password=password)
+        else:
+            if not utils.reCAPTCHA_is_valid(request):
+                err['captcha'] = '''
+                    <ul class="errorlist">
+                        <li>
+                            تشخیص مقابله با ربات صورت نگرفت.
+                        </li>
+                    </ul>
+                '''
+        if user is not None:
+            login(request, user)
+            return redirect('index')
+        else:
+            err['auth'] = 'نام کاربری یا کلمه عبور صحیح نیست'
+    else:
+        form = UserLogin()
+    return render(request, 'user_login.html', {
+        'form': form,
+        'err': err,
+        'recaptcha': utils.reCAPTCHA_Script()
+    })
+
+def user_logout(request):
+    """
+    This view use for logout.
+    """
+    if request.user.is_authenticated:
+        logout(request)
+        return redirect('index')
+    else:
+        return redirect('index')
