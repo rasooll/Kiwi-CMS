@@ -14,9 +14,19 @@ class SendComment(forms.ModelForm):
             }
 
 class SignUpForm(UserCreationForm):
-    password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'style': 'width: 100%'}))
-    password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
-    email = forms.CharField(max_length=254, required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    password1 = forms.CharField(
+        widget = forms.PasswordInput(
+            attrs={'class': 'form-control', 'style': 'width: 100%'}
+            )
+        )
+    password2 = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-control'})
+        )
+    email = forms.CharField(
+        max_length = 254,
+        required = True,
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+        )
     class Meta:
         model = User
         fields = (
@@ -32,3 +42,16 @@ class SignUpForm(UserCreationForm):
             'last_name':  forms.TextInput(attrs={'class': 'form-control'}),
             'username':   forms.TextInput(attrs={'class': 'form-control'}),            
             }
+
+class UserLogin(forms.Form):
+    username = forms.CharField(
+        label = 'نام کاربری',
+        max_length = 254,
+        required = True,
+        widget = forms.TextInput(attrs={'class': 'form-control'})
+        )
+    password = forms.CharField(
+        label = 'رمز عبور',
+        required = True,
+        widget = forms.PasswordInput(attrs={'class': 'form-control'})
+        )
