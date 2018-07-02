@@ -4,18 +4,33 @@
 
 {% block content %}
   <h1>ورود</h1>
-  {{ err.auth }}
+  
+  {% if err.auth %}
+    <div class="alert alert-danger myalert" role="alert">
+      {{ err.auth }}  
+    </div>
+  {% endif %}
+  
   <form action="" method="post">
     {% csrf_token %}
     <div class="form-group">
       <div class="row">
         <div class="col-12 col-md-12 col-lg-8">
-          {{ form.as_p }}
+          <div>
+            <label>نام کاربری</label>
+            {{ form.username }}
+          </div>
+          <div>
+            <label>کلمه عبور</label>
+            {{ form.password }}
+          </div>
         </div>
       </div>
-      {{ recaptcha|safe }}
-      {{ err.captcha|safe }}
+      <div class="captcha-row">
+        {{ recaptcha|safe }}
+        {{ err.captcha|safe }}
+      </div>
     </div>
-    <button type="submit">ورود</button>
+    <button type="submit" class="btn btn-dark sendcommentbtn">ورود</button>
   </form>
 {% endblock %}

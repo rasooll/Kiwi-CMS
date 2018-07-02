@@ -494,6 +494,11 @@ ul.errorlist{
 .captcha-row{
   margin-top: 25px;
 }
+.myalert{
+  margin-top: 25px;
+  font-size: 16px;
+  text-align: center;
+}
 .sendcommentbtn{
   margin-top: 15px;
 }
