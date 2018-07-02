@@ -41,8 +41,7 @@
                         {{ err.password2 }}
                     </div>
                     <div class="captcha-row">
-                        <script src='https://www.google.com/recaptcha/api.js?hl=fa'></script>
-                        <div class="g-recaptcha" data-sitekey="{{ captcha_key }}"></div>
+                        {{ recaptcha|safe }}
                         {{ err.captcha|safe }}
                     </div>
                     
