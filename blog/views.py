@@ -1,6 +1,5 @@
 from blog.models import Post, Category, Comment, Page, GeneralSetting, Navbar
-from tagging.models import Tag, TaggedItem
-from django.shortcuts import render_to_response, render
+from django.shortcuts import render
 from django.shortcuts import get_object_or_404, redirect
 from django.core.paginator import Paginator
 from django.core.exceptions import ObjectDoesNotExist
@@ -50,12 +49,7 @@ def view_post(request, slug):
         post = Post.objects.get(slug=slug)
     except ObjectDoesNotExist:
         raise Http404
-    tags = post.tags
-    if tags:
-        # Remove space before and after of tag
-        newTags = tags.replace(' ,', ',').replace(', ', ',').split(',')
-    else:
-        newTags = False
+    newTags = list(post.tags.names()) or False
     comments = Comment.objects.filter(post=post, accepted=True)
     if not comments:
         comments = False
@@ -108,25 +102,11 @@ def view_category(request, slug):
     })
 
 def view_tags(request, name):
-    """
-    This is use for view all post when this tag include on this posts. 
-    """
-    try:
-        tagid = Tag.objects.get(name=name)
-    except ObjectDoesNotExist:
-        tagid = False
-    if tagid:
-        posts = TaggedItem.objects.filter(tag_id=tagid)
-        count = posts.count()
-    else:
-        posts = False
-        count = 0
-    return render(
-        request,
-        'view_tag.html', {
+    posts = Post.objects.filter(tags__name=name)
+    return render(request, 'view_tag.html', {
         'posts': posts,
         'tag': name,
-        'count': count
+        'count': posts.count(),
     })
 
 def view_page(request, slug):
