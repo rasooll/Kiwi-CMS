@@ -1,8 +1,8 @@
 from django.db import models
-from django.db.models import permalink
+from django.urls import reverse
 from django.contrib.auth.models import User
-from tagging.fields import TagField
-from ckeditor_uploader.fields import RichTextUploadingField
+from taggit.managers import TaggableManager
+from django_ckeditor_5.fields import CKEditor5Field
 from django_jalali.db import models as jmodels
 
 # Create your models here.
@@ -24,9 +24,8 @@ class Category(models.Model):
     def __str__(self):
         return self.title
 
-    @permalink
     def get_absolute_url(self):
-        return ('view_blog_category', None, { 'slug': self.slug })
+        return reverse('view_blog_category', kwargs={'slug': self.slug})
 
     class Meta:
         verbose_name = 'دسته بندی'
@@ -64,8 +63,8 @@ class Post(models.Model):
         verbose_name='متن معرفی',
         help_text='توضیحات مختصری درباره‌ی این نوشته'
     )
-    content = RichTextUploadingField(
-        config_name='awesome_ckeditor',
+    content = CKEditor5Field(
+        config_name='default',
         verbose_name='متن اصلی',
         help_text='این متن در صفحه اصلی نوشته نمایش داده می‌شود'
     )
@@ -74,10 +73,7 @@ class Post(models.Model):
         on_delete=models.CASCADE,
         verbose_name='دسته بندی'
     )
-    tags = TagField(
-        verbose_name='برچسب‌ها',
-        help_text='با استفاده از کاما (,) آنها را از یکدیگر جدا نمایید'
-    )
+    tags = TaggableManager(verbose_name='برچسب‌ها', blank=True)
 
     def __str__(self):
         return self.title
@@ -86,9 +82,8 @@ class Post(models.Model):
         return self.published_date.strftime("%d %B %Y")
     get_date.short_description = 'زمان انتشار'
 
-    @permalink
     def get_absolute_url(self):
-        return ('view_blog_post', None, { 'slug': self.slug })
+        return reverse('view_blog_post', kwargs={'slug': self.slug})
 
     class Meta:
         verbose_name = 'نوشته'
@@ -150,8 +145,8 @@ class Page(models.Model):
         db_index=True,
         help_text='نام انگلیسی برای استفاده در لینک این برگه'
     )
-    content = RichTextUploadingField(
-        config_name='awesome_ckeditor',
+    content = CKEditor5Field(
+        config_name='default',
         verbose_name='محتوا'
     )
     published_date = jmodels.jDateTimeField(
@@ -162,9 +157,8 @@ class Page(models.Model):
     def __str__(self):
         return self.title
 
-    @permalink
     def get_absolute_url(self):
-        return ('view_other_page', None, { 'slug': self.slug })
+        return reverse('view_other_page', kwargs={'slug': self.slug})
     
     def get_date(self):
         return self.published_date.strftime("%d %B %Y")

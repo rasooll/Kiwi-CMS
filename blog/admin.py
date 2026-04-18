@@ -7,9 +7,13 @@ import django_jalali.admin as jadmin
 class BlogAdmin(admin.ModelAdmin):
     exclude = ['posted']
     prepopulated_fields = {'slug': ('title',)}
-    list_display = ('title', 'author', 'get_date', 'category', 'tags')
+    list_display = ('title', 'author', 'get_date', 'category', 'get_tags')
     list_filter = (('published_date', JDateFieldListFilter),'category',)
-    search_fields = ('title', 'slug', 'tags')
+    search_fields = ('title', 'slug', 'tags__name')
+
+    def get_tags(self, obj):
+        return ', '.join(t.name for t in obj.tags.all())
+    get_tags.short_description = 'برچسب‌ها'
 
 class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
