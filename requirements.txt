@@ -1,4 +1,4 @@
-Django==5.2
+Django==5.2.14
 django-ckeditor-5==0.2.20
 django-jalali==7.4.0
 django-taggit==6.1.0
